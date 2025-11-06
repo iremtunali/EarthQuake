@@ -3,7 +3,8 @@ EarthQuakeAI - Deprem Tahmin ve Görselleştirme Sistemi
 
 Bu proje, Türkiye'deki deprem verilerini anlık olarak görselleştiren ve makine öğrenmesi kullanarak deprem büyüklüklerini tahmin eden bir full-stack web uygulamasıdır.
 
-(İpucu: Bu görseli, kendi projenizin tam ekran görüntüsüyle (örneğin 'image_fee7c6.jpg') güncelleyebilirsiniz.)
+<img width="1919" height="885" alt="image" src="https://github.com/user-attachments/assets/e12d624b-4f46-4f4b-93b3-882c0216c0cc" />
+
 
 🚀 Temel Özellikler
 
