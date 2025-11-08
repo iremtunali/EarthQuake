@@ -6,11 +6,10 @@ const cors = require('cors');
 const app = express();
 const PORT = 5000;
 
-// React uygulamasından gelen isteklere izin ver
+
 app.use(cors());
 
 // Kandilli Rasathanesi'nin anlık deprem verilerini sunduğu URL
-// Bu URL'in yapısı değişirse scraper'ın güncellenmesi gerekir.
 const KANDILLI_URL = 'http://www.koeri.boun.edu.tr/scripts/lst0.asp';
 
 /**
@@ -21,7 +20,6 @@ const KANDILLI_URL = 'http://www.koeri.boun.edu.tr/scripts/lst0.asp';
  */
 function parseKandilliData(html) {
     const $ = cheerio.load(html);
-    // Veriler <pre> etiketi içinde yer alıyor
     const dataLines = $('pre').text().split('\n');
     
     const earthquakes = [];
@@ -31,10 +29,9 @@ function parseKandilliData(html) {
         const line = dataLines[i].trim();
         if (line.length === 0) continue;
 
-        // Veriyi boşluklara göre ayır
         const parts = line.split(/\s+/);
 
-        if (parts.length < 9) continue; // Geçersiz satır
+        if (parts.length < 9) continue; 
 
         try {
             const earthquakeData = {
@@ -49,8 +46,7 @@ function parseKandilliData(html) {
                 // Konum bilgisi birden fazla kelime olabilir, kalanını birleştir
                 konum: parts.slice(8).join(' ').replace(/İlksel|REVIZE/g, '').trim()
             };
-            
-            // Sadece anlamlı büyüklükteki depremleri al (örn: 1.5 ve üzeri)
+           
             if (earthquakeData.buyukluk_ml >= 1.5) {
                 earthquakes.push(earthquakeData);
             }
@@ -62,7 +58,7 @@ function parseKandilliData(html) {
 }
 
 
-// API Endpoint'i
+
 app.get('/api/earthquakes', async (req, res) => {
     try {
         // Kandilli'den veriyi çek
