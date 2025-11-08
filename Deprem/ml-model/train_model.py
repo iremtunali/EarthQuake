@@ -1,9 +1,9 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-# RandomForestRegressor yerine LightGBM'i import ediyoruz
+
 import lightgbm as lgb 
 from sklearn.metrics import mean_squared_error
-import joblib # Modeli kaydetmek için
+import joblib 
 
 # 1. Veri Yükleme
 try:
@@ -25,7 +25,7 @@ print(data.head())
 FEATURE_COLUMNS = ['xM', 'Mb', 'ML', 'Enlem', 'Boylam', 'Der(km)'] 
 TARGET_COLUMN = 'MD'
 
-# Gerekli sütunların olup olmadığını kontrol et
+
 required_cols = FEATURE_COLUMNS + [TARGET_COLUMN]
 if not all(col in data.columns for col in required_cols):
     print(f"Hata: Gerekli sütunlar bulunamadı.")
@@ -33,7 +33,7 @@ if not all(col in data.columns for col in required_cols):
     print(f"Dosyadaki sütunlar: {list(data.columns)}")
     exit()
 
-# Sayısal olmayan veya eksik verileri temizle
+
 data = data.dropna(subset=required_cols) 
 for col in required_cols:
     # Önceki adımdaki olası ondalık virgül sorununu da ekledim
@@ -56,26 +56,24 @@ print(f"Eğitim verisi: {len(X_train)} örnek")
 print(f"Test verisi: {len(X_test)} örnek")
 
 # 4. Model Seçimi ve Eğitim
-# ---- DEĞİŞİKLİK BURADA ----
-# RandomForestRegressor yerine LGBMRegressor modelini kullanalım
-# n_estimators=100 parametresi aynı kaldı, karşılaştırma yapabilirsiniz.
+
 model = lgb.LGBMRegressor(n_estimators=100, random_state=42)
 # ---------------------------
 
 print("Model eğitiliyor...")
-# LightGBM de scikit-learn API'ını kullandığı için .fit() metodu aynıdır.
+
 model.fit(X_train, y_train)
 print("Model eğitildi.")
 
 # 5. Model Değerlendirme
-# .predict() ve .score() metodları da aynı şekilde çalışır.
+
 predictions = model.predict(X_test)
 mse = mean_squared_error(y_test, predictions)
 print(f"Modelin Ortalama Karesel Hatası (MSE): {mse}")
 print(f"Modelin R^2 Skoru: {model.score(X_test, y_test)}")
 
 # 6. Modeli Kaydetme
-# joblib, LightGBM modellerini de sorunsuz kaydeder.
+
 model_filename = 'deprem_modeli.pkl'
 joblib.dump(model, model_filename)
 
